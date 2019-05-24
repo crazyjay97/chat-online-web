@@ -2,8 +2,7 @@ import React from 'react'
 import {NavBar, Icon} from 'antd-mobile';
 
 
-export default class MainHeader extends React.Component {
-
+export default class Index extends React.Component {
 
     render() {
         return (
@@ -11,7 +10,6 @@ export default class MainHeader extends React.Component {
                 leftContent={
                     <div onClick={() => {
                         console.log("====")
-                        this.props.navBarHandler()
                     }
                     }>
                         <Icon type="ellipsis"/>
