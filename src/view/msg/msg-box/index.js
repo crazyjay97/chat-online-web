@@ -5,11 +5,13 @@ import './index.less'
 export default class Index extends React.Component {
 
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
+        this.props = props
         this.state = {
             mine: {
-                id: '3333'
+                id: '3333',
+                sName: '生气哥',
             },
             msgHis: [
                 {
@@ -18,23 +20,28 @@ export default class Index extends React.Component {
                     sName: '糊涂哥',
                     type: 0
                 },
-                {
-                    content: '我是王二',
-                    sId: '3333',
-                    sName: '生气哥',
-                    type: 0
-                }
             ]
         }
     }
 
+    sendMsg({msg, type}, callback) {
+        this.state.msgHis.push({
+            content: msg,
+            sId: this.state.mine.id,
+            sName: this.state.mine.sName,
+            type: type,
+        })
+        this.setState({
+            msgHis: this.state.msgHis
+        }, callback)
+    }
 
     render() {
         return (
-            <div>
-                {this.state.msgHis.map(msg => {
+            <div className={'msg-wrap'}>
+                {this.state.msgHis.map((msg, index) => {
                     return (
-                        <div key={msg.sId}>
+                        <div key={index}>
                             <div className={'msg-row'}>
                                 <MsgBar msg={msg} mId={this.state.mine.id}/>
                             </div>
