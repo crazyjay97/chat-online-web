@@ -11,6 +11,22 @@ export default class Index extends React.Component {
         this.state = {
             txt: ''
         }
+        document.addEventListener("keydown", (e) => this.handleEnterKey(e));
+    }
+
+    handleEnterKey(e) {
+        if (e.keyCode === 13) {
+            this.sendMsg()
+        }
+    }
+
+    sendMsg() {
+        if (!this.state.txt) {
+            alert("内容不可为空")
+            return
+        }
+        this.refs.msgBox.sendMsg({msg: this.state.txt, type: 2})
+        this.setState({txt: ''})
     }
 
     componentDidMount() {
@@ -32,11 +48,9 @@ export default class Index extends React.Component {
                 <div>
                     <WingBlank size={'sm'}>
                         <Flex>
-                            <InputItem onChange={(val) => this.setState({txt: val})} className={'text-input'}/>
+                            <InputItem value={this.state.txt} onChange={(val) => this.setState({txt: val})} className={'text-input'}/>
                             <Button className={'send-button'}
-                                    onClick={() => {
-                                        this.refs.msgBox.sendMsg({msg: this.state.txt, type: 2})
-                                    }}
+                                    onClick={() => this.sendMsg()}
                             >发送</Button>
                         </Flex>
                     </WingBlank>
