@@ -15,7 +15,7 @@ export default class Index extends React.Component {
                         <Icon type="ellipsis"/>
                     </div>
                 }>
-                嘻嘻
+                奇葩的聊天室
             </NavBar>
         )
     }
