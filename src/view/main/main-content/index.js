@@ -17,12 +17,16 @@ export default class Index extends React.Component {
         this.refs.msgWrap.scrollTop = this.refs.msgWrap.scrollHeight - 100
     }
 
+    updateScrollHeight() {
+        this.refs.msgWrap.scrollTop = this.refs.msgWrap.scrollHeight
+    }
+
     render() {
         return (
             <div className={'main-content'}>
                 <div ref={'msgWrap'} className={'msg-box'}>
                     <WingBlank size={'sm'}>
-                        <MsgBox ref={'msgBox'}/>
+                        <MsgBox updateScrollHeight={() => this.updateScrollHeight()} ref={'msgBox'}/>
                     </WingBlank>
                 </div>
                 <div>
@@ -30,14 +34,9 @@ export default class Index extends React.Component {
                         <Flex>
                             <InputItem onChange={(val) => this.setState({txt: val})} className={'text-input'}/>
                             <Button className={'send-button'}
-                                    onClick={
-                                        () => {
-                                            this.refs.msgBox.sendMsg({msg: this.state.txt, type: 0}, () => {
-                                                this.refs.msgWrap.scrollTop = this.refs.msgWrap.scrollHeight
-                                            })
-
-                                        }
-                                    }
+                                    onClick={() => {
+                                        this.refs.msgBox.sendMsg({msg: this.state.txt, type: 2})
+                                    }}
                             >发送</Button>
                         </Flex>
                     </WingBlank>

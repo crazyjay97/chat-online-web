@@ -1,3 +1,5 @@
+import store, {USER_ACTION} from '@/redux'
+
 const websocketUrl = 'ws://127.0.0.1:9410'
 
 export default class WebsocketClient {
@@ -23,19 +25,52 @@ export default class WebsocketClient {
 
     onOpen = (res) => {
         console.log('链接创建成功')
-        console.log('返回内容', res)
-
     }
 
     onMessage = (res) => {
-        console.log('消息返回')
-        console.log(res)
+        if (res.data) {
+            let data = JSON.parse(res.data)
+            this.msgHandle(data)
+        }
     }
 
-    send = ({sender, content, type}) => {
+    send = ({content, id, type}) => {
+        let data = {Sender: id, Content: content, Type: type}
+        this.websocket.send(JSON.stringify(data))
+    }
 
+
+    msgHandle(data) {
+        switch (data.Type) {
+            case this.SendMsgTypeEnum.MsgTypeCreate:
+                this.initInfo(data)
+                break
+            case this.SendMsgTypeEnum.MsgTypeSendAll:
+                this.resMsg(data)
+                break
+        }
+    }
+
+    resMsg = (data) => {
+        store.dispatch({
+            type: USER_ACTION.RES_MSG,
+            msg: {
+                content: data.Content,
+                id: data.Sender,
+                name: data.Name
+            }
+        })
 
     }
 
+    initInfo(data) {
+        store.dispatch({
+            type: USER_ACTION.CREATE_USER,
+            payload: {
+                id: data.Id,
+                name: '王三'
+            }
+        })
+    }
 
 }

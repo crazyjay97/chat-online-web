@@ -1,49 +1,44 @@
 import React from 'react'
 import './index.less'
 
+import {connect} from 'react-redux';
 
-export default class Index extends React.Component {
+const mapStateToProps = (state) => ({
+    wsClient: state.wsClient,
+    id: state.id,
+    name: state.name,
+    msgHis: state.msgHis
+})
+
+class Index extends React.Component {
 
 
     constructor(props) {
         super(props)
         this.props = props
-        this.state = {
-            mine: {
-                id: '3333',
-                sName: '生气哥',
-            },
-            msgHis: [
-                {
-                    content: '你是谁',
-                    sId: '123',
-                    sName: '糊涂哥',
-                    type: 0
-                },
-            ]
-        }
     }
 
-    sendMsg({msg, type}, callback) {
-        this.state.msgHis.push({
+    sendMsg({msg, type}) {
+        this.props.wsClient.send({
             content: msg,
-            sId: this.state.mine.id,
-            sName: this.state.mine.sName,
+            id: this.props.id,
+            name: this.props.name,
             type: type,
         })
-        this.setState({
-            msgHis: this.state.msgHis
-        }, callback)
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.props.updateScrollHeight()
     }
 
     render() {
         return (
             <div className={'msg-wrap'}>
-                {this.state.msgHis.map((msg, index) => {
+                {this.props.msgHis.map((msg, index) => {
                     return (
                         <div key={index}>
                             <div className={'msg-row'}>
-                                <MsgBar msg={msg} mId={this.state.mine.id}/>
+                                <MsgBar msg={msg} mId={this.props.id}/>
                             </div>
                         </div>
                     )
@@ -54,10 +49,10 @@ export default class Index extends React.Component {
 }
 
 const MsgBar = (props) => {
-    if (props.msg.sId === props.mId) {
+    if (props.msg.id == props.mId) {
         return (
             <div className={'msg-bar-mine'}>
-                <span>{props.msg.sName}</span>
+                <span>{props.msg.name}</span>
                 <div className={'msg-bar-content msg-bar-content-mine'}>
                     {props.msg.content}
                 </div>
@@ -66,7 +61,7 @@ const MsgBar = (props) => {
     } else {
         return (
             <div className={'msg-bar-other'}>
-                <span>{props.msg.sName}</span>
+                <span>{props.msg.name}</span>
                 <div className={'msg-bar-content msg-bar-content-other'}>
                     {props.msg.content}
                 </div>
@@ -75,3 +70,4 @@ const MsgBar = (props) => {
     }
 }
 
+export default connect(mapStateToProps, null, null, {forwardRef: true})(Index);

@@ -1,20 +1,35 @@
 import {createStore, combineReducers} from 'redux'
+import WebsocketClient from '@/websocket'
+
+let websocketClient = new WebsocketClient();
+websocketClient.connect();
 
 
-const initUser = {
-    id: '',
-    name: '',
+export const USER_ACTION = {
+    CREATE_USER: 'CREATE_USER',
+    RES_MSG: 'RES_MSG',
+
 }
 
-const USER_ACTION = {
-    CET_USER: 'CET_USER'
+const initState = {
+    wsClient: websocketClient,
+    msgHis: []
 }
 
-
-function User(state = initUser, action) {
+const User = (state = initState, action) => {
     switch (action.type) {
-        case USER_ACTION.CET_USER:
-            return {...state,}
+        case USER_ACTION.CREATE_USER:
+            return {
+                ...state,
+                id: action.payload.id,
+                name: action.payload.name
+            }
+        case  USER_ACTION.RES_MSG:
+            return {
+                ...state,
+                msgHis: [...state.msgHis, action.msg]
+
+            }
         default:
             return state;
     }
@@ -22,7 +37,6 @@ function User(state = initUser, action) {
 }
 
 
-const reducers = combineReducers({User})
-const store = createStore(reducers)
+const store = createStore(User)
 
 export default store

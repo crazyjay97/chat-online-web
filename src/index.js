@@ -3,10 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import WebsocketClient from './websocket'
-
-let websocketClient = new WebsocketClient();
-websocketClient.connect();
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 
