@@ -1,6 +1,6 @@
 import store, {USER_ACTION} from '@/redux'
 
-const websocketUrl = 'ws://127.0.0.1:9410'
+const websocketUrl = 'ws://192.168.1.42:9410'
 
 export default class WebsocketClient {
 
@@ -9,6 +9,7 @@ export default class WebsocketClient {
             MsgTypeCreate: 0,
             MsgTypeSendOne: 1,
             MsgTypeSendAll: 2,
+            MsgTypeUpdateNickname: 4
         }
 
         this.ReceiveMsgTypeEnum = {
@@ -51,13 +52,18 @@ export default class WebsocketClient {
         }
     }
 
+    updateNickName({id, nickname}) {
+        let data = {Sender: id, Content: nickname, Type: this.SendMsgTypeEnum.MsgTypeUpdateNickname}
+        this.websocket.send(JSON.stringify(data))
+    }
+
     resMsg = (data) => {
         store.dispatch({
             type: USER_ACTION.RES_MSG,
             msg: {
                 content: data.Content,
                 id: data.Sender,
-                name: data.Name
+                name: data.SenderName
             }
         })
 
@@ -68,7 +74,6 @@ export default class WebsocketClient {
             type: USER_ACTION.CREATE_USER,
             payload: {
                 id: data.Id,
-                name: '王三'
             }
         })
     }
