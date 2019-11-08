@@ -1,9 +1,10 @@
 import React from 'react';
-import {InputItem, Button, WingBlank} from 'antd-mobile'
+import {InputItem, Button, WingBlank, Toast} from 'antd-mobile'
 import './index.less'
 import {connect} from 'react-redux';
 import {USER_ACTION} from "@/redux";
 import {withRouter} from 'react-router-dom';
+import http from '@/http'
 
 
 const mapDispatchToProps = dispatch => {
@@ -11,6 +12,12 @@ const mapDispatchToProps = dispatch => {
         updateNickName: nickname => dispatch({
             type: USER_ACTION.UPDATE_NICKNAME,
             nickname: nickname
+        }),
+        createUser: id => dispatch({
+            type: USER_ACTION.CREATE_USER,
+            payload: {
+                id: id,
+            }
         })
     }
 }
@@ -31,11 +38,27 @@ class Index extends React.Component {
     setNikeNameAndPush() {
         if (this.state.nickname) {
             this.props.updateNickName({nickname: this.state.nickname})
-            this.props.wsClient.updateNickName({id: this.props.id, nickname: this.state.nickname})
-            this.props.history.push({pathname: '/main'})//带有state
+            //set nickname
+            http({
+                url: `join?nickname=${this.state.nickname}`,
+                method: 'get',
+            }).then(({data}) => {
+                let {Id, Type, Content} = data
+                if (Type === this.props.wsClient.SendMsgTypeEnum.Success) {
+                    this.props.createUser(Id)
+                    this.props.wsClient.connect(Id)
+                    this.props.history.push({pathname: '/main'})
+                } else {
+                    Toast.fail('很抱歉，昵称已存在，请更换昵称后重试', 1);
+                }
+            })
         } else {
-            alert("请输入昵称")
+            Toast.fail('请输入昵称', 1);
         }
+    }
+
+    updateNickName() {
+
     }
 
     render() {

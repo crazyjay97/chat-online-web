@@ -2,19 +2,18 @@ import {createStore, combineReducers} from 'redux'
 import WebsocketClient from '@/websocket'
 
 let websocketClient = new WebsocketClient();
-websocketClient.connect();
 
 
 export const USER_ACTION = {
     CREATE_USER: 'CREATE_USER',
     RES_MSG: 'RES_MSG',
-    UPDATE_NICKNAME: 'UPDATE_NICKNAME'
+    UPDATE_NICKNAME: 'UPDATE_NICKNAME',
 
 }
 
 const initState = {
     wsClient: websocketClient,
-    msgHis: []
+    msgHis: [],
 }
 
 const User = (state = initState, action) => {

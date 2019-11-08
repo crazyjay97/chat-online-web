@@ -1,6 +1,6 @@
 import store, {USER_ACTION} from '@/redux'
 
-const websocketUrl = 'ws://118.25.26.231:9410'
+const websocketUrl = 'ws://192.168.1.22:9410'
 
 export default class WebsocketClient {
 
@@ -9,7 +9,9 @@ export default class WebsocketClient {
             MsgTypeCreate: 0,
             MsgTypeSendOne: 1,
             MsgTypeSendAll: 2,
-            MsgTypeUpdateNickname: 4
+            MsgTypeUpdateNickname: 4,
+            Success: 200,
+            MsgTypeNickAlreadyUse: 505
         }
 
         this.ReceiveMsgTypeEnum = {
@@ -18,8 +20,8 @@ export default class WebsocketClient {
         }
     }
 
-    connect = () => {
-        this.websocket = new WebSocket(websocketUrl)
+    connect = (id) => {
+        this.websocket = new WebSocket(websocketUrl + '/' + id)
         this.websocket.onopen = this.onOpen
         this.websocket.onmessage = this.onMessage
     }
@@ -48,6 +50,8 @@ export default class WebsocketClient {
                 break
             case this.SendMsgTypeEnum.MsgTypeSendAll:
                 this.resMsg(data)
+                break
+            case this.SendMsgTypeEnum.MsgTypeNickAlreadyUse:
                 break
         }
     }
