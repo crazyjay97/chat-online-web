@@ -1,6 +1,6 @@
 import store, {USER_ACTION} from '@/redux'
 
-const websocketUrl = 'ws://192.168.31`.174:9410'
+const websocketUrl = 'ws://192.168.31.174:9410'
 
 export default class WebsocketClient {
 
