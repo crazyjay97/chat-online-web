@@ -8,6 +8,11 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import store from './redux'
 
 function App() {
+
+    const onEnterMain = () => {
+        console.log("000")
+    }
+
     return (
         <Provider store={store}>
             <div className="App">

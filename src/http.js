@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const req = axios.create()
 
-const baseUrl = 'http://192.168.1.22:9410'
+const baseUrl = 'http://192.168.31.174:9410'
 
 const getBaseOptions = () => {
     const config = {

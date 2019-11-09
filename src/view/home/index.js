@@ -1,9 +1,9 @@
 import React from 'react';
 import {InputItem, Button, WingBlank, Toast} from 'antd-mobile'
 import './index.less'
-import {connect} from 'react-redux';
-import {USER_ACTION} from "@/redux";
-import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux'
+import {USER_ACTION} from "@/redux"
+import {withRouter} from 'react-router-dom'
 import http from '@/http'
 
 
@@ -74,7 +74,7 @@ class Index extends React.Component {
     }
 }
 
-const routerIndex = withRouter(Index);//CourseIntro是自己定义的组件名称
+const routerIndex = withRouter(Index)
 
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(routerIndex);
+export default connect(mapStateToProps, mapDispatchToProps, null, {forwardRef: true})(routerIndex)
