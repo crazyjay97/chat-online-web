@@ -1,25 +1,13 @@
 import store, {USER_ACTION} from '@/redux'
 
-const websocketUrl = 'ws://192.168.31.174:9410'
+const websocketUrl = 'ws://192.168.1.35:9410'
+
+import common from '@/common'
 
 export default class WebsocketClient {
 
     constructor() {
-        this.SendMsgTypeEnum = {
-            MsgTypeCreate: 0,
-            MsgTypeSendOne: 1,
-            MsgTypeSendAll: 2,
-            MsgTypeUpdateNickname: 4,
-            Success: 200,
-            MsgTypeNickAlreadyUse: 505,
-            MsgTypeUserJoin: 203,
-            MsgTypeUserExit: 204,
-        }
 
-        this.ReceiveMsgTypeEnum = {
-            ConnSuccess: 0,
-            Msg: 1,
-        }
     }
 
     connect = (id) => {
@@ -47,33 +35,37 @@ export default class WebsocketClient {
 
     msgHandle(data) {
         switch (data.Type) {
-            case this.SendMsgTypeEnum.MsgTypeCreate:
+            case common.SendMsgTypeEnum.MsgTypeCreate:
                 this.initInfo(data)
                 break
-            case this.SendMsgTypeEnum.MsgTypeSendAll:
+            case common.SendMsgTypeEnum.MsgTypeSendAll:
                 this.resMsg(data)
                 break
-            case this.SendMsgTypeEnum.MsgTypeNickAlreadyUse:
+            case common.SendMsgTypeEnum.MsgTypeNickAlreadyUse:
                 break
-            case this.SendMsgTypeEnum.MsgTypeUserJoin:
+            case common.SendMsgTypeEnum.MsgTypeUserJoin:
+                this.resMsg(data)
                 break
-            case this.SendMsgTypeEnum.MsgTypeUserExit:
+            case common.SendMsgTypeEnum.MsgTypeUserExit:
+                this.resMsg(data)
                 break
         }
     }
 
     updateNickName({id, nickname}) {
-        let data = {Sender: id, Content: nickname, Type: this.SendMsgTypeEnum.MsgTypeUpdateNickname}
+        let data = {Sender: id, Content: nickname, Type: common.SendMsgTypeEnum.MsgTypeUpdateNickname}
         this.websocket.send(JSON.stringify(data))
     }
 
     resMsg = (data) => {
+        console.log(data)
         store.dispatch({
             type: USER_ACTION.RES_MSG,
             msg: {
                 content: data.Content,
                 id: data.Sender,
-                name: data.SenderName
+                name: data.SenderName,
+                type: data.Type,
             }
         })
 

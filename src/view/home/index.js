@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {USER_ACTION} from "@/redux"
 import {withRouter} from 'react-router-dom'
 import http from '@/http'
+import common from '@/common'
 
 
 const mapDispatchToProps = dispatch => {
@@ -44,7 +45,7 @@ class Index extends React.Component {
                 method: 'get',
             }).then(({data}) => {
                 let {Id, Type, Content} = data
-                if (Type === this.props.wsClient.SendMsgTypeEnum.Success) {
+                if (Type === common.SendMsgTypeEnum.Success) {
                     this.props.createUser(Id)
                     this.props.wsClient.connect(Id)
                     this.props.history.push({pathname: '/main'})

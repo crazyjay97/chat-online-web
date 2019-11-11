@@ -1,5 +1,6 @@
 import React from 'react'
 import './index.less'
+import common from '@/common'
 
 import {connect} from 'react-redux';
 
@@ -49,22 +50,36 @@ class Index extends React.Component {
 }
 
 const MsgBar = (props) => {
-    if (props.msg.id == props.mId) {
-        return (
-            <div className={'msg-bar-mine'}>
-                <span>{props.msg.name}</span>
-                <div className={'msg-bar-content msg-bar-content-mine'}>
-                    {props.msg.content}
+    if (props.msg.type == common.SendMsgTypeEnum.MsgTypeSendAll) {
+        if (props.msg.id == props.mId) {
+            return (
+                <div className={'msg-bar-mine'}>
+                    <span>{props.msg.name}</span>
+                    <div className={'msg-bar-content msg-bar-content-mine'}>
+                        {props.msg.content}
+                    </div>
                 </div>
+            )
+        } else {
+            return (
+                <div className={'msg-bar-other'}>
+                    <span>{props.msg.name}</span>
+                    <div className={'msg-bar-content msg-bar-content-other'}>
+                        {props.msg.content}
+                    </div>
+                </div>
+            )
+        }
+    } else if (props.msg.type == common.SendMsgTypeEnum.MsgTypeUserExit) {
+        return (
+            <div className={'msg-tip'} >
+                {props.msg.name}离开了聊天室
             </div>
         )
-    } else {
+    } else if (props.msg.type == common.SendMsgTypeEnum.MsgTypeUserJoin) {
         return (
-            <div className={'msg-bar-other'}>
-                <span>{props.msg.name}</span>
-                <div className={'msg-bar-content msg-bar-content-other'}>
-                    {props.msg.content}
-                </div>
+            <div className={'msg-tip'}>
+                {props.msg.name}加入了聊天室
             </div>
         )
     }
